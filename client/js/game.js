@@ -38,10 +38,10 @@ const timePanel = document.getElementById('timePanel');
 // ССЫЛКИ НА КАРТИНКИ
 // ============================================
 const IMG = {
-    base:    'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/osnowa.png',
-    spots:   'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/spots.png',
-    stripes: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/stripes.png',
-    line:    'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/ine.png'
+    base:    'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/osnowa.png',
+    spots:   'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/spots.png',
+    stripes: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/stripes.png',
+    line:    'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/ine.png'
 };
 
 const images = {};
@@ -52,7 +52,7 @@ const images = {};
 const LOCATIONS = {
     forest: {
         name: '🌿 Лесная поляна',
-        bg: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/%D1%83.png',
+        bg: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/%D1%83.png',
         fg: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/1885e0f5-7082-4036-9a8d-5a49afb17b03.png',
         width: 4000,
         height: 4000,
@@ -60,7 +60,7 @@ const LOCATIONS = {
     },
     cave: {
         name: '🏔 Пещера',
-        bg: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/e47acf3a1b4d10889d2d82ab9354db8f.png',
+        bg: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/e47acf3a1b4d10889d2d82ab9354db8f.png',
         fg: null,
         width: 3000,
         height: 3000,
