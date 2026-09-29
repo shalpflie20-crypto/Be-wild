@@ -22,7 +22,7 @@ body {
 .bg-layer {
     position: fixed;
     inset: 0;
-    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/568cb9bf-0d7e-406f-b8e7-80b93292e156.png');
+    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/568cb9bf-0d7e-406f-b8e7-80b93292e156.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -58,7 +58,7 @@ body {
     height: 600px;
     padding: 60px 80px;
 
-    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/rock.png');
+    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/rock.png');
     background-size: 100% 100%;
     background-position: center;
     background-repeat: no-repeat;
