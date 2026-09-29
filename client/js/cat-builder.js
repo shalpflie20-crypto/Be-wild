@@ -7,10 +7,10 @@ const ctx = canvas.getContext('2d');
 
 // Ссылки на картинки
 const IMG = {
-    base:    'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/osnowa.png',
-    spots:   'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/spots.png',
-    stripes: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/stripes.png',
-    line:    'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/ine.png'
+    base:    'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/osnowa.png',
+    spots:   'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/spots.png',
+    stripes: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/stripes.png',
+    line:    'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/ine.png'
 };
 
 const images = {};
