@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Конструктор кота — Be Wild</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/widget.css">
+    <style>
+        .constructor-wrapper {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        .constructor-card {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(40, 28, 22, 0.92);
+            backdrop-filter: blur(12px);
+            border: 2px solid #b87a3a;
+            border-radius: 40px;
+            padding: 40px 50px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        .constructor-preview {
+            background: rgba(30, 20, 15, 0.5);
+            border-radius: 32px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #cat-canvas {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            display: block;
+            background: rgba(201, 224, 176, 0.1);
+            border-radius: 24px;
+        }
+
+        .constructor-controls h1 {
+            font-size: 1.8rem;
+            color: #ffd58c;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .constructor-controls .subtitle {
+            text-align: center;
+            color: #e0c8a0;
+            font-style: italic;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+        }
+
+        .section {
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            color: #f0e0c0;
+            font-size: 0.95rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Кружочки-пресеты */
+        .color-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+
+        .color-swatch {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid rgba(200, 150, 80, 0.4);
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 0;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.15);
+            border-color: #ffd58c;
+        }
+
+        .color-swatch.active {
+            border: 3px solid #ffd58c;
+            box-shadow: 0 0 12px rgba(255, 213, 140, 0.6);
+            transform: scale(1.1);
+        }
+
+        /* Ползунки */
+        .slider-row {
+            margin-bottom: 10px;
+        }
+
+        .slider-row label {
+            display: flex;
+            justify-content: space-between;
+            color: #f0e0c0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .slider-row input[type="range"] {
+            width: 100%;
+            height: 6px;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider-row input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #ffd58c;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #b8722a;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .slider-row input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #ffd58c;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #b8722a;
+        }
+
+        /* Узор */
+        .pattern-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .pattern-btn {
+            flex: 1;
+            padding: 10px 14px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #6b3f15;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1.5px solid rgba(184, 122, 58, 0.5);
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .pattern-btn:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .pattern-btn.active {
+            background: linear-gradient(95deg, #b8722a, #d9942c);
+            color: #2a1c0c;
+            border-color: #8b5a2b;
+            box-shadow: 0 3px 0 #6b3f15;
+        }
+
+        /* Блок с настройкой узора — СКРЫТ по умолчанию */
+        .pattern-settings {
+            display: none;
+            animation: patternFadeIn 0.25s ease;
+        }
+
+        .pattern-settings.visible {
+            display: block;
+        }
+
+        @keyframes patternFadeIn {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Кнопка сохранения */
+        .save-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            font-family: inherit;
+            color: #2a1c0c;
+            background: linear-gradient(95deg, #b8722a, #d9942c);
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #6b3f15;
+            transition: 0.15s;
+            margin-top: 16px;
+        }
+
+        .save-btn:hover {
+            filter: brightness(1.08);
+        }
+
+        .save-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #6b3f15;
+        }
+
+        @media (max-width: 780px) {
+            .constructor-card {
+                grid-template-columns: 1fr;
+                padding: 30px 22px;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <div class="constructor-wrapper">
+        <div class="constructor-card">
+
+            <!-- Левая колонка: превью -->
+            <div class="constructor-preview">
+                <canvas id="cat-canvas" width="500" height="500"></canvas>
+            </div>
+
+            <!-- Правая колонка: управление -->
+            <div class="constructor-controls">
+                <h1>Создай своего воителя</h1>
+                <div class="subtitle">окрас, узор, характер</div>
+
+                <!-- Цвет шерсти -->
+                <div class="section">
+                    <div class="section-title">🎨 Цвет шерсти</div>
+
+                    <div class="color-row" id="bodyColors"></div>
+
+                    <div class="slider-row">
+                        <label>Насыщенность <span id="bodySatVal">70</span></label>
+                        <input type="range" id="bodySat" min="10" max="100" value="70">
+                    </div>
+
+                    <div class="slider-row">
+                        <label>Яркость <span id="bodyLightVal">50</span></label>
+                        <input type="range" id="bodyLight" min="15" max="85" value="50">
+                    </div>
+                </div>
+
+                <!-- Узор -->
+                <div class="section">
+                    <div class="section-title">🐾 Узор</div>
+
+                    <div class="pattern-row">
+                        <button class="pattern-btn active" data-pattern="none" type="button">Без узора</button>
+                        <button class="pattern-btn" data-pattern="spots" type="button">Пятна</button>
+                        <button class="pattern-btn" data-pattern="stripes" type="button">Полоски</button>
+                    </div>
+
+                    <!-- Настройки узора — показываются только когда выбран узор -->
+                    <div class="pattern-settings" id="patternSettings">
+                        <div class="color-row" id="patternColors"></div>
+
+                        <div class="slider-row">
+                            <label>Насыщенность <span id="patternSatVal">70</span></label>
+                            <input type="range" id="patternSat" min="10" max="100" value="70">
+                        </div>
+
+                        <div class="slider-row">
+                            <label>Яркость <span id="patternLightVal">30</span></label>
+                            <input type="range" id="patternLight" min="10" max="90" value="30">
+                        </div>
+
+                        <div class="slider-row">
+                            <label>Прозрачность <span id="patternOpacityVal">100</span>%</label>
+                            <input type="range" id="patternOpacity" min="0" max="100" value="100">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Кнопка -->
+                <button class="save-btn" id="saveAndPlayBtn">✨ В игру! ✨</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Виджет котика -->
+    <button class="cat-widget-btn" id="catWidgetBtn" type="button" aria-label="Открыть меню">
+        <img src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/free-icon-pawprint-8389258.png" alt="Котик">
+    </button>
+
+    <div class="cat-widget-overlay" id="catWidgetOverlay">
+        <div class="cat-widget-window">
+            <button class="cat-widget-close" id="catWidgetClose" type="button" aria-label="Закрыть">×</button>
+
+            <div class="cat-widget-tabs">
+                <button class="cat-tab active" data-tab="rules" type="button">Правила сайта</button>
+                <button class="cat-tab" data-tab="start" type="button">Первые шаги</button>
+                <button class="cat-tab" data-tab="news" type="button">Новости сайта</button>
+            </div>
+
+            <div class="cat-widget-body">
+                <div class="cat-tab-content active" data-content="rules">
+                    <h2>📜 Правила сайта</h2>
+                    <p>Здесь будут правила поведения на сайте и в игре.</p>
+                    <ul>
+                        <li>Будь вежлив с другими игроками</li>
+                        <li>Не используй нецензурную лексику</li>
+                        <li>Не спамь в чате</li>
+                        <li>Уважай чужой отыгрыш</li>
+                    </ul>
+                </div>
+
+                <div class="cat-tab-content" data-content="start">
+                    <h2>🐾 Первые шаги</h2>
+                    <p>Добро пожаловать в Be Wild! Что делать сначала:</p>
+                    <ol>
+                        <li>Зарегистрируй аккаунт</li>
+                        <li>Создай своего кота-воителя</li>
+                        <li>Выбери племя по духу</li>
+                        <li>Осмотрись в мире и найди других игроков</li>
+                    </ol>
+                </div>
+
+                <div class="cat-tab-content" data-content="news">
+                    <h2>📰 Новости сайта</h2>
+                    <p><strong>Сентябрь 2026</strong> — открытие регистрации, добавлена двухступенчатая форма входа.</p>
+                    <p><strong>Скоро:</strong> конструктор кота, игровое поле, чат.</p>
+                </div>
+            </div>
+
+            <div class="cat-widget-footer">
+                📩 Техподдержка: <a href="mailto:support@bewild.ru">support@bewild.ru</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/widget.js"></script>
+    <script src="js/cat-builder.js"></script>
+</body>
+</html>

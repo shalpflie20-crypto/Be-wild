@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Be Wild — Игра</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/widget.css">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background: #000;
+        }
+
+        #viewport {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #world {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+            will-change: transform;
+            z-index: 1;
+        }
+
+        #world-fg-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: 0 0;
+            will-change: transform;
+            z-index: 23;
+            pointer-events: none;
+        }
+
+        #bg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            z-index: 1;
+            transition: filter 0.4s ease;
+        }
+
+        #bg-layer.sniffing {
+            filter: grayscale(1) contrast(1.1) brightness(0.7);
+        }
+
+        #mouse {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            pointer-events: none;
+            z-index: 5;
+            transform-origin: center center;
+            transition: filter 0.4s ease, opacity 0.4s ease;
+        }
+
+        #mouse.sniffing {
+            filter: grayscale(1) brightness(0.7)
+                    drop-shadow(0 0 30px rgba(255, 40, 40, 0.9))
+                    drop-shadow(0 0 60px rgba(255, 40, 40, 0.5));
+            animation: mousePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes mousePulse {
+            0%, 100% {
+                filter: grayscale(1) brightness(0.7)
+                        drop-shadow(0 0 25px rgba(255, 40, 40, 0.7))
+                        drop-shadow(0 0 50px rgba(255, 40, 40, 0.4));
+            }
+            50% {
+                filter: grayscale(1) brightness(0.9)
+                        drop-shadow(0 0 45px rgba(255, 60, 60, 1))
+                        drop-shadow(0 0 90px rgba(255, 40, 40, 0.7));
+            }
+        }
+
+        #smell-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 8;
+            pointer-events: none;
+        }
+
+        #cat-canvas {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            pointer-events: none;
+            z-index: 10;
+            transform-origin: center center;
+            transition: filter 0.4s ease;
+        }
+
+        #cat-canvas.sniffing {
+            filter: grayscale(1) contrast(1.1) brightness(0.85);
+        }
+
+        #fg-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            z-index: 20;
+            pointer-events: none;
+            transition: filter 0.4s ease;
+        }
+
+        #fg-layer.sniffing {
+            filter: grayscale(1) contrast(1.1) brightness(0.7);
+        }
+
+        /* Передний слой запахов — внутри #world-fg-wrapper */
+        #smell-layer-fg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        #night-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 21;
+            background: transparent;
+            mix-blend-mode: multiply;
+            transition: background 0.8s ease;
+        }
+
+        #night-overlay.night {
+            background: #3a4a7a;
+        }
+
+        #weather-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 22;
+            transition: background 0.8s ease, backdrop-filter 0.8s ease;
+        }
+
+        #weather-overlay.rain-light {
+            background: linear-gradient(180deg, rgba(120, 140, 180, 0.08), rgba(60, 80, 120, 0.15));
+        }
+
+        #weather-overlay.rain-heavy {
+            background: linear-gradient(180deg, rgba(60, 70, 100, 0.25), rgba(30, 40, 70, 0.4));
+        }
+
+        #weather-overlay.snow-light {
+            background: linear-gradient(180deg, rgba(200, 220, 240, 0.1), rgba(180, 200, 230, 0.18));
+        }
+
+        #weather-overlay.blizzard {
+            background: linear-gradient(180deg, rgba(220, 230, 245, 0.3), rgba(180, 200, 230, 0.45));
+        }
+
+        .smell-label {
+            position: absolute;
+            pointer-events: none;
+            z-index: 24;
+            background: rgba(180, 20, 20, 0.9);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 0.8rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -100%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .smell-label.visible {
+            opacity: 1;
+        }
+
+        .hint {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            color: #ffd58c;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-weight: bold;
+            white-space: nowrap;
+            z-index: 30;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        .sniff-indicator {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(180, 40, 30, 0.85);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            padding: 8px 22px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 30;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(180, 40, 30, 0.5);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sniff-indicator.visible {
+            opacity: 1;
+        }
+
+        .wind-indicator {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(150, 200, 255, 0.4);
+            border-radius: 16px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            z-index: 30;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            color: #a8d4ff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-width: 80px;
+        }
+
+        .wind-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            opacity: 0.8;
+        }
+
+        .wind-arrow {
+            font-size: 1.8rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+            color: #a8d4ff;
+            display: inline-block;
+        }
+
+        .wind-speed {
+            font-size: 0.75rem;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+
+        .weather-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(180, 220, 255, 0.4);
+            border-radius: 20px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #d0e8ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            user-select: none;
+        }
+
+        .weather-panel-title {
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .weather-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(180, 220, 255, 0.3);
+            color: #d0e8ff;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            min-width: 150px;
+        }
+
+        .weather-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(180, 220, 255, 0.6);
+        }
+
+        .weather-btn.active {
+            background: linear-gradient(95deg, #4a7ab5, #6a9fd5);
+            color: #fff;
+            border-color: #a0d0ff;
+            box-shadow: 0 0 14px rgba(120, 180, 255, 0.5);
+        }
+
+        .time-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(180, 220, 255, 0.4);
+            border-radius: 20px;
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            z-index: 30;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            color: #d0e8ff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            user-select: none;
+        }
+
+        .time-panel-title {
+            font-size: 0.7rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        .time-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1.5px solid rgba(180, 220, 255, 0.3);
+            color: #d0e8ff;
+            font-family: inherit;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            min-width: 130px;
+        }
+
+        .time-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(180, 220, 255, 0.6);
+        }
+
+        .time-btn.active {
+            background: linear-gradient(95deg, #4a5a85, #2a3a5a);
+            color: #fff;
+            border-color: #a0b0d0;
+            box-shadow: 0 0 14px rgba(80, 120, 200, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="viewport">
+        <div id="world">
+            <div id="bg-layer"></div>
+            <img id="mouse" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/%D0%BC%D1%8B%D1%88%D1%8C.png" alt="Мышь">
+            <canvas id="smell-layer" width="0" height="0"></canvas>
+            <canvas id="cat-canvas" width="200" height="200"></canvas>
+            <div id="fg-layer"></div>
+            <div class="smell-label" id="smellLabel"></div>
+        </div>
+
+        <div id="night-overlay"></div>
+        <div id="weather-overlay"></div>
+
+        <div id="world-fg-wrapper">
+            <canvas id="smell-layer-fg" width="0" height="0"></canvas>
+        </div>
+
+        <div class="hint">💡 WASD — движение | Shift — ускорение | Q — принюхаться</div>
+        <div class="sniff-indicator" id="sniffIndicator">👃 РЕЖИМ НЮХА</div>
+
+        <div class="wind-indicator" id="windIndicator">
+            <div class="wind-label">ВЕТЕР</div>
+            <div class="wind-arrow" id="windArrow">➤</div>
+            <div class="wind-speed" id="windSpeed">0</div>
+        </div>
+
+        <div class="weather-panel" id="weatherPanel">
+            <div class="weather-panel-title">☁ ПОГОДА</div>
+            <button class="weather-btn active" data-weather="clear" type="button">☀ Ясно</button>
+            <button class="weather-btn" data-weather="rain-light" type="button">🌧 Мелкий дождь</button>
+            <button class="weather-btn" data-weather="rain-heavy" type="button">⛈ Сильный дождь</button>
+            <button class="weather-btn" data-weather="snow-light" type="button">🌨 Мелкий снег</button>
+            <button class="weather-btn" data-weather="blizzard" type="button">❄ Метель</button>
+        </div>
+
+        <div class="time-panel" id="timePanel">
+            <div class="time-panel-title">🕐 ВРЕМЯ</div>
+            <button class="time-btn active" data-time="day" type="button">☀ День</button>
+            <button class="time-btn" data-time="night" type="button">🌙 Ночь</button>
+        </div>
+    </div>
+
+    <button class="cat-widget-btn" id="catWidgetBtn" type="button" aria-label="Открыть меню">
+        <img src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/free-icon-pawprint-8389258.png" alt="Котик">
+    </button>
+
+    <div class="cat-widget-overlay" id="catWidgetOverlay">
+        <div class="cat-widget-window">
+            <button class="cat-widget-close" id="catWidgetClose" type="button" aria-label="Закрыть">×</button>
+
+            <div class="cat-widget-tabs">
+                <button class="cat-tab active" data-tab="rules" type="button">Правила сайта</button>
+                <button class="cat-tab" data-tab="start" type="button">Первые шаги</button>
+                <button class="cat-tab" data-tab="news" type="button">Новости сайта</button>
+            </div>
+
+            <div class="cat-widget-body">
+                <div class="cat-tab-content active" data-content="rules">
+                    <h2>📜 Правила сайта</h2>
+                    <p>Здесь будут правила поведения на сайте и в игре.</p>
+                    <ul>
+                        <li>Будь вежлив с другими игроками</li>
+                        <li>Не используй нецензурную лексику</li>
+                        <li>Не спамь в чате</li>
+                        <li>Уважай чужой отыгрыш</li>
+                    </ul>
+                </div>
+
+                <div class="cat-tab-content" data-content="start">
+                    <h2>🐾 Первые шаги</h2>
+                    <p>Добро пожаловать в Be Wild! Что делать сначала:</p>
+                    <ol>
+                        <li>Зарегистрируй аккаунт</li>
+                        <li>Создай своего кота-воителя</li>
+                        <li>Выбери племя по духу</li>
+                        <li>Осмотрись в мире и найди других игроков</li>
+                    </ol>
+                </div>
+
+                <div class="cat-tab-content" data-content="news">
+                    <h2>📰 Новости сайта</h2>
+                    <p><strong>Сентябрь 2026</strong> — открытие регистрации, добавлена двухступенчатая форма входа.</p>
+                    <p><strong>Скоро:</strong> конструктор кота, игровое поле, чат.</p>
+                </div>
+            </div>
+
+            <div class="cat-widget-footer">
+                📩 Техподдержка: <a href="mailto:support@bewild.ru">support@bewild.ru</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/widget.js"></script>
+    <script src="js/game.js"></script>
+</body>
+</html>

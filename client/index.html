@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be Wild — Prophecy</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/widget.css">
+</head>
+<body>
+
+    <!-- Фоновая картинка мира -->
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+
+    <main class="auth-wrapper">
+
+        <!-- ====== ЭКРАН 1: РЕГИСТРАЦИЯ (2 шага) ====== -->
+        <div id="screen-register" class="screen">
+
+            <!-- Левая колонка: заголовок + шаги -->
+            <div class="screen-side">
+                <div class="title">Be Wild</div>
+                <div class="subtitle">Prophecy</div>
+                <div class="tagline">обрети свой собственный голос</div>
+
+                <div class="steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-num">1</div>
+                        <div class="step-label">Аккаунт</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-num">2</div>
+                        <div class="step-label">Персонаж</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Правая колонка: формы -->
+            <div class="screen-main">
+
+                <!-- ШАГ 1 -->
+                <form id="form-step1" class="auth-form step-form" data-step="1">
+                    <h3 class="form-title">Шаг 1. Создай аккаунт</h3>
+
+                    <div class="input-group">
+                        <label>Логин (email)</label>
+                        <input type="email" id="reg-email" placeholder="example@mail.com" autocomplete="off">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Пароль</label>
+                        <input type="password" id="reg-password" placeholder="минимум 6 символов">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Повторите пароль</label>
+                        <input type="password" id="reg-password2" placeholder="ещё раз">
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="next-btn">
+                            <img class="btn-base" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/cfdf533b-bd23-4810-9e66-53937aaaf0eb.png" alt="Дальше">
+                            <img class="btn-hover" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/lightrock.png" alt="">
+                        </button>
+                    </div>
+
+                    <p class="error" id="step1-error"></p>
+                </form>
+
+                <!-- ШАГ 2 -->
+                <form id="form-step2" class="auth-form step-form hidden" data-step="2">
+                    <h3 class="form-title">Шаг 2. Создай персонажа</h3>
+
+                    <div class="input-group">
+                        <label>Имя персонажа</label>
+                        <input type="text" id="reg-name" placeholder="Как зовут твоего воителя?">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Пол</label>
+                        <div class="gender-options">
+                            <label class="gender-option">
+                                <input type="radio" name="reg-gender" value="male" checked> Кот
+                            </label>
+                            <label class="gender-option">
+                                <input type="radio" name="reg-gender" value="female"> Кошка
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Племя</label>
+                        <select id="reg-clan">
+                            <option value="river">Речное племя</option>
+                            <option value="thunder">Грозовое племя</option>
+                            <option value="shadow">Племя Теней</option>
+                            <option value="wind">Племя Ветра</option>
+                        </select>
+                    </div>
+
+                    <div class="form-buttons form-buttons-row">
+                        <button type="button" class="back-btn" id="back-to-step1">
+                            <img class="btn-base" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/55.png" alt="Назад">
+                            <img class="btn-hover" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/44.png" alt="">
+                        </button>
+                        <button type="submit" class="next-btn">
+                            <img class="btn-base" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/cfdf533b-bd23-4810-9e66-53937aaaf0eb.png" alt="Дальше">
+                            <img class="btn-hover" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/lightrock.png" alt="">
+                        </button>
+                    </div>
+
+                    <p class="error" id="step2-error"></p>
+                </form>
+
+                <!-- Переключатель на вход -->
+                <div class="switch-link">
+                    Уже есть аккаунт?
+                    <button type="button" class="link-btn" id="go-to-login">Войти</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ====== ЭКРАН 2: ВХОД ====== -->
+        <div id="screen-login" class="screen hidden">
+
+            <!-- Левая колонка: заголовок -->
+            <div class="screen-side">
+                <div class="title">Be Wild</div>
+                <div class="subtitle">Prophecy</div>
+                <div class="tagline">обрети свой собственный голос</div>
+            </div>
+
+            <!-- Правая колонка: форма входа -->
+            <div class="screen-main">
+                <form id="form-login" class="auth-form step-form" data-step="1">
+                    <h3 class="form-title">С возвращением, воитель</h3>
+
+                    <div class="input-group">
+                        <label>Логин (email)</label>
+                        <input type="email" id="login-email" placeholder="example@mail.com" autocomplete="off">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Пароль</label>
+                        <input type="password" id="login-password" placeholder="введите пароль">
+                    </div>
+
+                    <div class="form-buttons">
+                        <button type="submit" class="next-btn">
+                            <img class="btn-base" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/33.png" alt="Войти">
+                            <img class="btn-hover" src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/22.png" alt="">
+                        </button>
+                    </div>
+
+                    <p class="error" id="login-error"></p>
+                </form>
+
+                <!-- Переключатель на регистрацию -->
+                <div class="switch-link">
+                    Нет аккаунта?
+                    <button type="button" class="link-btn" id="go-to-register">Зарегистрироваться</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Виджет котика (кнопка + модальное окно) -->
+    <button class="cat-widget-btn" id="catWidgetBtn" type="button" aria-label="Открыть меню">
+        <img src="https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/free-icon-pawprint-8389258.png" alt="Котик">
+    </button>
+
+    <div class="cat-widget-overlay" id="catWidgetOverlay">
+        <div class="cat-widget-window">
+            <button class="cat-widget-close" id="catWidgetClose" type="button" aria-label="Закрыть">×</button>
+
+            <!-- Вкладки сверху -->
+            <div class="cat-widget-tabs">
+                <button class="cat-tab active" data-tab="rules" type="button">Правила сайта</button>
+                <button class="cat-tab" data-tab="start" type="button">Первые шаги</button>
+                <button class="cat-tab" data-tab="news" type="button">Новости сайта</button>
+            </div>
+
+            <!-- Скроллящееся содержимое -->
+            <div class="cat-widget-body">
+
+                <div class="cat-tab-content active" data-content="rules">
+                    <h2>📜 Правила сайта</h2>
+                    <p><b>Общие положения</b></p>
+                    <ul>
+                        <p>1.1. Регистрируясь на сайте, пользователь автоматически соглашается с настоящими правилами.</p>
+                        <p>1.2. Незнание правил не освобождает от ответственности.</p>
+                        <p>1.3. Администрация вправе изменять правила с уведомлением игроков в разделе новостей.</p>
+                        <p>1.4. Пользуясь сайтом, вы подтверждаете, что вам 16 и более лет.</p>
+                    </ul>
+<br>
+                    <p><b>Правила общения</b></p>
+                    <ul>
+                        <p>2.1. Уважение. Запрещены оскорбления, унижения, травля, угрозы в адрес игроков и администрации.</p>
+                        <p>2.2. Запрещённый контент: расизм, нацизм, религиозная и национальная вражда, пропаганда насилия.</p>
+                        <p>2.3. Спам и флуд. Запрещены повторяющиеся сообщения, капс, реклама сторонних ресурсов без согласия администрации.</p>
+                        <p>2.4. Приватность. Запрещено распространение личных данных (чужих и своих) — логина и пароля от аккаунта, передача персонажа в чужие руки.</p>
+                    </ul>
+<br>
+                    <p><b>Правила игрового процесса</b></p>
+                    <ul>
+                        <p>3.1. Читы и запрещённое ПО. Использование читов, макросов, автокликеров, скриптов и любого стороннего ПО, дающего преимущество, запрещено. Разрешенные скрипты по согласованию с администрацией.</p>
+                        <p>3.2. Эксплойты и баги. Запрещено использовать баги игры. О найденном баге нужно сообщить администрации.</p>
+                        <p>3.4. Бустинг и договорные матчи. Запрещены сговор, намеренный слив, игра за вознаграждение в обход правил.</p>
+                        <p>3.5. Передача аккаунта. Запрещена продажа, обмен и передача аккаунта третьим лицам.</p>
+                    </ul>
+<br>
+                     <p><b>Наказания и их виды</b></p>
+                    <ul>
+                        <p>7.1. Виды наказаний:</p>
+                        <ul><li>предупреждение;</li>
+                        <li>мут (временный / постоянный);</li>
+                        <li>бан (временный / постоянный)</li>
+                        <li>обнуление прогресса / откат ценностей;</li>
+                        <li>блокировка по IP / устройству;</li></ul>
+                        <p>7.2. Решение о наказании принимает модератор/администрация.</p>
+                        <p>7.3. Наказание может быть выдано без предварительного предупреждения за грубые нарушения.</p>
+                        <p>7.4. Сроки и тяжесть зависят от нарушения, повторности и умысла.</p>
+                    </ul>
+                </div>
+
+                <div class="cat-tab-content active" data-content="start">
+                    <h2>Первые шаги</h2>
+                    <ul>
+                        <p>Be Wild – любительская игра по мотивам серии книг "Коты-воители". Настала пора примерить на себя роль настоящего лесного кота, готового ко всем испытаниям и вызовам судьбы. Обрети свой голос!</p>
+                    </ul>
+<br>
+                <p><b>Механика</b></p>
+                <ul>
+                        <p>Вся активность сайта проходит в игровом поле – вашей новой обители. Мир познаётся наощупь, путём проб и ошибок. Куда выгоднее заручиться поддержкой и мудростью кого-то более опытного.</p>
+                    <br>
+                    <p>С рождения каждый котёнок имеет одинаковй уровень характеристик: силу, ловкость, выносливость, мудрость. Каждая характеристика будет прокачиваться после выполнения определённых действий. Стать умельцем на все лапы очень-очень сложно, но невозможно. Быть может, одарённым котиком станешь именно ты?</p>
+                    <br>
+                    <p>Также у каждого кота есть потребности, за которыми необходимо следить.</p>
+                    <br>
+                    <p><b>Сила.</b> Влияет на физические способности вашего кота. Сильный кот наносит более тяжёлые удары и принимает меньше урона от нападений. Можеть унести более тяжёлые предметы и более тяжелых котов. Но, как правило, он менее поворотлив и обретает силу за счет ловкости.</p>
+                    <br>
+                    <p><b>Ловкость.</b> Поможет вашему коту незаметнее красться, лучше уворачивать от атак и более умело их парировать.</p>
+                    <br>
+                    <p><b>Выносливость.</b> Главный регулятор вашей энергии.</p>
+                </ul>    
+                </div>
+
+                <div class="cat-tab-content" data-content="news">
+                    <h2>📰 Новости сайта</h2>
+                    <p><strong>Сентябрь 2026</strong> — открытие регистрации, добавлена двухступенчатая форма входа.</p>
+                    <p><strong>Скоро:</strong> конструктор кота, игровое поле, чат.</p>
+                </div>
+
+            </div>
+
+            <!-- Фиксированный контакт внизу -->
+            <div class="cat-widget-footer">
+                📩 Техподдержка: <a href="mailto:support@bewild.ru">support@bewild.ru</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/widget.js"></script>
+</body>
+</html>

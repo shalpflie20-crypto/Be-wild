@@ -1,0 +1,516 @@
+/* ============================================
+   БАЗА
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #f5e6c8;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* ============================================
+   ФОН
+   ============================================ */
+.bg-layer {
+    position: fixed;
+    inset: 0;
+    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/568cb9bf-0d7e-406f-b8e7-80b93292e156.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+/* Затемнение фона */
+.bg-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 12, 6, 0.55);
+    z-index: -1;
+}
+
+/* ============================================
+   КОНТЕЙНЕР АВТОРИЗАЦИИ
+   ============================================ */
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+}
+
+/* ============================================
+   КАРТОЧКА — ОДИНАКОВАЯ ДЛЯ ОБОИХ ЭКРАНОВ
+   ============================================ */
+.screen {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: 600px;
+    padding: 60px 80px;
+
+    background-image: url('https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/rock.png');
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background-color: transparent;
+
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 60px;
+    align-items: center;
+
+    transition: opacity 0.25s ease;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+.screen-side {
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.screen-main {
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ============================================
+   ЗАГОЛОВКИ
+   ============================================ */
+.title {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: 4px;
+    color: #f5e6c8;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #e8d5b0;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.tagline {
+    color: #e0c8a0;
+    font-style: italic;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 34px;
+    text-align: center;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================
+   ИНДИКАТОР ШАГОВ
+   ============================================ */
+.steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.45;
+    transition: opacity 0.3s;
+}
+
+.step.active {
+    opacity: 1;
+}
+
+.step-num {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(30, 20, 15, 0.7);
+    border: 2px solid rgba(200, 150, 80, 0.5);
+    color: #e0c8a0;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s;
+}
+
+.step.active .step-num {
+    background: linear-gradient(95deg, #b8722a, #d9942c);
+    color: #2a1c0c;
+    border-color: #ffd58c;
+    box-shadow: 0 0 14px rgba(232, 181, 90, 0.6);
+}
+
+.step-label {
+    font-size: 0.75rem;
+    color: #e0c8a0;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.step-line {
+    width: 40px;
+    height: 2px;
+    background: rgba(200, 150, 80, 0.4);
+    margin-top: -22px;
+}
+
+/* ============================================
+   ФОРМА
+   ============================================ */
+.step-form {
+    animation: fadeIn 0.25s ease;
+}
+
+.step-form.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.form-title {
+    font-size: 1.2rem;
+    color: #ffd58c;
+    margin-bottom: 22px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.input-group {
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #f0e0c0;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-align: left;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgba(30, 20, 15, 0.75);
+    border: 1.5px solid rgba(200, 150, 80, 0.6);
+    border-radius: 60px;
+    color: #fff3e0;
+    outline: none;
+    transition: all 0.2s;
+}
+
+input:focus {
+    border-color: #e8b55a;
+    background: rgba(40, 28, 22, 0.9);
+    box-shadow: 0 0 0 3px rgba(232, 181, 90, 0.22);
+}
+
+input::placeholder {
+    color: #a08a6a;
+}
+
+/* ============================================
+   ВЫПАДАЮЩИЙ СПИСОК (племя)
+   ============================================ */
+select {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgba(30, 20, 15, 0.75);
+    border: 1.5px solid rgba(200, 150, 80, 0.6);
+    border-radius: 60px;
+    color: #fff3e0;
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23e0c8a0'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 22px;
+    padding-right: 44px;
+}
+
+select:focus {
+    border-color: #e8b55a;
+    background-color: rgba(40, 28, 22, 0.9);
+    box-shadow: 0 0 0 3px rgba(232, 181, 90, 0.22);
+}
+
+select option {
+    background: #2a1c0c;
+    color: #fff3e0;
+}
+
+/* ============================================
+   ПОЛ
+   ============================================ */
+.gender-options {
+    display: flex;
+    gap: 16px;
+    background: rgba(30, 20, 15, 0.5);
+    padding: 8px 16px;
+    border-radius: 60px;
+}
+
+.gender-option {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f0e0c0;
+    padding: 6px 14px;
+    border-radius: 50px;
+    transition: 0.2s;
+}
+
+.gender-option:hover {
+    background: rgba(60, 40, 25, 0.5);
+}
+
+.gender-option input[type="radio"] {
+    accent-color: #d9942c;
+    cursor: pointer;
+}
+
+/* ============================================
+   КНОПКИ
+   ============================================ */
+.next-btn {
+    position: relative;
+    width: 250px;
+    height: 120px;
+    display: block;
+    margin: 10px auto;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    box-shadow: none;
+    font-size: 0;
+    color: transparent;
+}
+
+.next-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 1s ease;
+    pointer-events: none;
+}
+
+.next-btn .btn-base {
+    opacity: 1;
+    position: relative;
+}
+
+.next-btn .btn-hover {
+    opacity: 0;
+}
+
+.next-btn:hover .btn-base {
+    opacity: 0;
+}
+
+.next-btn:hover .btn-hover {
+    opacity: 1;
+}
+
+.next-btn:active {
+    transform: translateY(2px);
+}
+
+.back-btn {
+    position: relative;
+    width: 250px;
+    height: 120px;
+    display: block;
+    margin: 10px auto;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    box-shadow: none;
+    font-size: 0;
+    color: transparent;
+}
+
+.back-btn img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: opacity 1s ease;
+    pointer-events: none;
+}
+
+.back-btn .btn-base {
+    opacity: 1;
+    position: relative;
+}
+
+.back-btn .btn-hover {
+    opacity: 0;
+}
+
+.back-btn:hover .btn-base {
+    opacity: 0;
+}
+
+.back-btn:hover .btn-hover {
+    opacity: 1;
+}
+
+.back-btn:active {
+    transform: translateY(2px);
+}
+
+.form-buttons {
+    margin-top: 6px;
+}
+
+.form-buttons-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-buttons-row .next-btn {
+    flex: 1;
+}
+
+/* ============================================
+   ССЫЛКА-ПЕРЕКЛЮЧАТЕЛЬ ВНУТРИ КАРТОЧКИ
+   ============================================ */
+.switch-link {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 0.9rem;
+    color: #e0c8a0;
+    font-style: italic;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.link-btn {
+    background: transparent;
+    border: none;
+    color: #ffd58c;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-style: normal;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0;
+    margin-left: 4px;
+    transition: 0.15s;
+}
+
+.link-btn:hover {
+    color: #ffe8b0;
+}
+
+/* ============================================
+   ОШИБКИ
+   ============================================ */
+.error {
+    color: #ff8866;
+    text-align: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 12px;
+    min-height: 20px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================
+   АДАПТИВ
+   ============================================ */
+@media (max-width: 780px) {
+    .screen {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 40px 30px;
+        height: auto;
+        min-height: 560px;
+    }
+
+    .screen-side,
+    .screen-main {
+        height: auto;
+        min-height: auto;
+    }
+
+    .title {
+        font-size: 2.4rem;
+    }
+}
+
+@media (max-width: 550px) {
+    .screen {
+        padding: 30px 20px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+}
