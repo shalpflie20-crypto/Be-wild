@@ -53,7 +53,7 @@ const LOCATIONS = {
     forest: {
         name: '🌿 Лесная поляна',
         bg: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/%D1%83.png',
-        fg: 'https://raw.githubusercontent.com/shalpflie20-crypto/Be-wild/refs/heads/main/1885e0f5-7082-4036-9a8d-5a49afb17b03.png',
+        fg: 'https://raw.githubusercontent.com/shalpflie20-crypto/bew/refs/heads/main/1885e0f5-7082-4036-9a8d-5a49afb17b03.png',
         width: 4000,
         height: 4000,
         mouse: { x: 2000, y: 2000, label: 'мышь' }
